@@ -29957,3 +29957,15 @@ html.ios body {
 body {
   padding-top: 70px;
 }
+
+select {
+  color: grey;
+}
+
+option {
+  color: black;
+}
+
+option[default] {
+  display: none;
+}

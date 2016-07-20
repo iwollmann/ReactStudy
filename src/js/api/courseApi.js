@@ -1,7 +1,7 @@
 'use strict';
 
 //Mock
-var courses = require('../../../courseData').courses;
+var courses = require('../../../FakeData/courseData').courses;
 
 var CourseApi = {
     getAll: function () {

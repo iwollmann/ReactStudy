@@ -4,11 +4,13 @@ var React = require('react');
 var CancelButton = require('../common/cancelButton');
 var Input = require('../common/textinput');
 var NumberInput = require('../common/numberInput');
+var DropDown = require('../common/dropdown');
 
 var ManageCoursePage = React.createClass({
     getInitialState:function () {
         return{value:''}
     },
+
     handleChange: function (event) {
         this.setState({value:event.target.value});
     },
@@ -30,18 +32,17 @@ var ManageCoursePage = React.createClass({
                             value={this.props.value}
                             onChange={this.handleChange} />
 
-                        <Input name="Author"
-                            label="Author"
-                            placeholder="Author Name"
-                            value={this.props.value}
-                            onChange={this.handleChange} />
+                        <DropDown name="Author"
+                            id="slAuthor"
+                            options={["x1","x2"]} />
+
 
                         <Input name="Category"
                             label="Category"
                             placeholder="Category Name"
                             value={this.props.value}
                             onChange={this.handleChange} />
-                        
+                                                
                         <NumberInput name="Length"
                             label="Length"
                             placeholder="Length"

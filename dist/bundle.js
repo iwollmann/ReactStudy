@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4f4951a6a06fb9058e4b"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ba38b3ba9efbe046ef3b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -27790,6 +27790,7 @@
 	var CancelButton = __webpack_require__(250);
 	var Input = __webpack_require__(243);
 	var NumberInput = __webpack_require__(251);
+	var DropDown = __webpack_require__(252);
 
 	var ManageCoursePage = React.createClass({
 	    displayName: 'ManageCoursePage',
@@ -27797,6 +27798,7 @@
 	    getInitialState: function getInitialState() {
 	        return { value: '' };
 	    },
+
 	    handleChange: function handleChange(event) {
 	        this.setState({ value: event.target.value });
 	    },
@@ -27826,11 +27828,9 @@
 	                        placeholder: 'Title',
 	                        value: this.props.value,
 	                        onChange: this.handleChange }),
-	                    React.createElement(Input, { name: 'Author',
-	                        label: 'Author',
-	                        placeholder: 'Author Name',
-	                        value: this.props.value,
-	                        onChange: this.handleChange }),
+	                    React.createElement(DropDown, { name: 'Author',
+	                        id: 'slAuthor',
+	                        options: ["x1", "x2"] }),
 	                    React.createElement(Input, { name: 'Category',
 	                        label: 'Category',
 	                        placeholder: 'Category Name',
@@ -27926,6 +27926,57 @@
 	});
 
 	module.exports = NumberInput;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	"use require";
+
+	var React = __webpack_require__(1);
+
+	var DropDown = React.createClass({
+	    displayName: "DropDown",
+
+	    propTypes: {
+	        id: React.PropTypes.string.isRequired,
+	        name: React.PropTypes.string.isRequired,
+	        options: React.PropTypes.array.isRequired
+	    },
+
+	    render: function render() {
+	        var createOption = function createOption(option) {
+	            return React.createElement(
+	                "option",
+	                { value: option },
+	                option
+	            );
+	        };
+
+	        return React.createElement(
+	            "div",
+	            { className: "field" },
+	            React.createElement(
+	                "label",
+	                null,
+	                this.props.name
+	            ),
+	            React.createElement(
+	                "select",
+	                { name: this.props.name, className: "ui dropdown", id: this.props.id },
+	                React.createElement(
+	                    "option",
+	                    { value: "", "default": true, selected: true },
+	                    this.props.name
+	                ),
+	                this.props.options.map(createOption, this)
+	            )
+	        );
+	    }
+	});
+
+	module.exports = DropDown;
 
 /***/ }
 /******/ ]);
