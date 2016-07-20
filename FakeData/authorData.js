@@ -1,16 +1,16 @@
 module.exports ={
-    courses:[
+    authors:[
         {
             id:1,
             name:'Iuri Matarazzo Wollmann',
         },
         {
             id:2,
-            title:'Cory House',
+            name:'Cory House',
         },
         {
             id:3,
-            title:'Bnaya Eshet',
+            name:'Bnaya Eshet',
         }
     ]
 };

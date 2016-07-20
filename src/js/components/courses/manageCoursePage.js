@@ -5,14 +5,22 @@ var CancelButton = require('../common/cancelButton');
 var Input = require('../common/textinput');
 var NumberInput = require('../common/numberInput');
 var DropDown = require('../common/dropdown');
+var AuthorApi = require('../../api/authorApi');
+var _ = require('lodash');
 
 var ManageCoursePage = React.createClass({
     getInitialState:function () {
-        return{value:''}
+        return{value:'', authors:[]}
     },
 
     handleChange: function (event) {
-        this.setState({value:event.target.value});
+        this.setState({
+            value:event.target.value
+        });
+    },
+
+    componentWillMount: function () {
+        this.setState({authors: AuthorApi.getAll()});
     },
 
     render: function () {
@@ -34,8 +42,7 @@ var ManageCoursePage = React.createClass({
 
                         <DropDown name="Author"
                             id="slAuthor"
-                            options={["x1","x2"]} />
-
+                            options={_.map(this.state.authors,'name')} />
 
                         <Input name="Category"
                             label="Category"
