@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "eabe7e4e515e523f9bfa"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "ca0c2b5039170b6ca420"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -27203,7 +27203,8 @@
 	    React.createElement(IndexRoute, { component: __webpack_require__(241) }),
 	    React.createElement(Route, { path: 'lectures', component: LecturePage }),
 	    React.createElement(Route, { name: 'add', path: 'addLecture', component: __webpack_require__(242) }),
-	    React.createElement(Route, { name: 'courses', path: 'courses', component: __webpack_require__(244) })
+	    React.createElement(Route, { name: 'courses', path: 'courses', component: __webpack_require__(244) }),
+	    React.createElement(Route, { name: 'addCourse', path: 'course/add', component: __webpack_require__(247) })
 	);
 
 	module.exports = Routes;
@@ -27606,6 +27607,9 @@
 
 	var React = __webpack_require__(1);
 	var Table = __webpack_require__(246);
+	var Router = __webpack_require__(172);
+	var Link = Router.Link;
+
 	var test = {
 	    "key": "Id",
 	    "columns": ["Id", "Name"],
@@ -27619,6 +27623,16 @@
 	        return React.createElement(
 	            'div',
 	            null,
+	            React.createElement(
+	                'div',
+	                { className: 'ui header' },
+	                React.createElement(
+	                    Link,
+	                    { to: 'course/add', className: 'ui button' },
+	                    'Add'
+	                )
+	            ),
+	            React.createElement('div', { className: 'ui divider' }),
 	            React.createElement(Table, { key: 'listTable', data: test })
 	        );
 	    }
@@ -27709,6 +27723,65 @@
 	});
 
 	module.exports = Table;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(1);
+	var CancelButton = __webpack_require__(248);
+
+	var ManageCoursePage = React.createClass({
+	    displayName: 'ManageCoursePage',
+
+	    render: function render() {
+
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'h2',
+	                { className: 'ui header' },
+	                'ManageCourse'
+	            ),
+	            React.createElement(CancelButton, { value: 'Cancel', 'return': '/courses' })
+	        );
+	    }
+	});
+
+	module.exports = ManageCoursePage;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	"use require";
+
+	var React = __webpack_require__(1);
+	var BrowserHistory = __webpack_require__(230);
+	var Router = __webpack_require__(172);
+	var Link = Router.Link;
+
+	var CancelButton = React.createClass({
+	    displayName: 'CancelButton',
+
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                Link,
+	                { to: this.props.return, className: 'ui button' },
+	                this.props.value
+	            )
+	        );
+	    }
+	});
+
+	module.exports = CancelButton;
 
 /***/ }
 /******/ ]);

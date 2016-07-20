@@ -2,6 +2,9 @@
 
 var React = require('react');
 var Table = require('../common/table');
+var Router = require('react-router');
+var Link = Router.Link;
+
 var test = {
 	"key": "Id",
 	"columns": ["Id", "Name"],
@@ -14,6 +17,10 @@ var CoursesList = React.createClass({
     render: function () {
         return(
             <div>
+                <div className="ui header">
+                        <Link to="course/add" className="ui button">Add</Link>
+                    </div>
+                    <div className="ui divider"></div>
                 <Table key="listTable" data={test}/>
             </div>
             )

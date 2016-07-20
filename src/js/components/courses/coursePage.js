@@ -8,7 +8,7 @@ var CoursePage = React.createClass({
         return(
             <div>
                 <h1 className="ui header">Courses</h1>
-                <div className="ui segment">
+                <div className="ui segment">                    
                     <CoursesList />
                 </div>
             </div>

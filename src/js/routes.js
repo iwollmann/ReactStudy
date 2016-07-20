@@ -13,6 +13,7 @@ var Routes =(
         <Route path="lectures" component={LecturePage}/>
         <Route name="add" path="addLecture" component={require('./components/lectures/manageLecturePage')}/>
         <Route name="courses" path="courses" component={require('./components/courses/coursePage')}/>
+        <Route name="addCourse" path="course/add" component={require('./components/courses/manageCoursePage')}/>
     </Route>
 )
 
