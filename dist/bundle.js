@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ca0c2b5039170b6ca420"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "4f4951a6a06fb9058e4b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -27204,7 +27204,7 @@
 	    React.createElement(Route, { path: 'lectures', component: LecturePage }),
 	    React.createElement(Route, { name: 'add', path: 'addLecture', component: __webpack_require__(242) }),
 	    React.createElement(Route, { name: 'courses', path: 'courses', component: __webpack_require__(244) }),
-	    React.createElement(Route, { name: 'addCourse', path: 'course/add', component: __webpack_require__(247) })
+	    React.createElement(Route, { name: 'addCourse', path: 'course/add', component: __webpack_require__(249) })
 	);
 
 	module.exports = Routes;
@@ -27575,9 +27575,20 @@
 
 	var React = __webpack_require__(1);
 	var CoursesList = __webpack_require__(245);
+	var CourseApi = __webpack_require__(247);
 
 	var CoursePage = React.createClass({
 	    displayName: 'CoursePage',
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            courses: []
+	        };
+	    },
+
+	    componentWillMount: function componentWillMount() {
+	        this.setState({ courses: CourseApi.getAll() });
+	    },
 
 	    render: function render() {
 	        return React.createElement(
@@ -27591,7 +27602,7 @@
 	            React.createElement(
 	                'div',
 	                { className: 'ui segment' },
-	                React.createElement(CoursesList, null)
+	                React.createElement(CoursesList, { courses: this.state.courses })
 	            )
 	        );
 	    }
@@ -27612,8 +27623,7 @@
 
 	var test = {
 	    "key": "Id",
-	    "columns": ["Id", "Name"],
-	    "rows": [{ "Id": 1, "Name": "Leitura 1" }, { "Id": 2, "Name": "Leitura 2" }, { "Id": 3, "Name": "Outra Leitura" }]
+	    "source": [{ "Id": 1, "Name": "Leitura 1" }, { "Id": 2, "Name": "Leitura 2" }, { "Id": 3, "Name": "Outra Leitura" }]
 	};
 
 	var CoursesList = React.createClass({
@@ -27633,7 +27643,7 @@
 	                )
 	            ),
 	            React.createElement('div', { className: 'ui divider' }),
-	            React.createElement(Table, { key: 'listTable', data: test })
+	            React.createElement(Table, { keyField: 'Id', source: this.props.courses })
 	        );
 	    }
 	});
@@ -27652,19 +27662,16 @@
 	    displayName: "Table",
 
 	    propTypes: {
-	        data: React.PropTypes.shape({
-	            key: React.PropTypes.string.isRequired,
-	            columns: React.PropTypes.array.isRequired,
-	            rows: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
-	        })
+	        keyField: React.PropTypes.string.isRequired,
+	        source: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
 	    },
 
 	    render: function render() {
-	        var createRows = function createRows(data) {
+	        var createRows = function createRows(source, key) {
 	            var trs = [];
-	            for (var row in data.rows) {
-	                if (data.rows.hasOwnProperty(row)) {
-	                    trs.push(createRow(data.rows[row], data.key));
+	            for (var row in source) {
+	                if (source.hasOwnProperty(row)) {
+	                    trs.push(createRow(source[row], key));
 	                }
 	            }
 
@@ -27684,17 +27691,26 @@
 
 	            return React.createElement(
 	                "tr",
-	                { key: row[key] },
+	                { key: row[key.toLowerCase()] },
 	                tds
 	            );
 	        };
 
-	        var createHeader = function createHeader(column) {
-	            return React.createElement(
-	                "th",
-	                { key: column },
-	                column
-	            );
+	        var createColumns = function createColumns(source) {
+	            if (source.length == 0) return;
+
+	            var ths = [];
+	            var columns = source[0];
+	            var columnKeys = Object.keys(columns);
+	            for (var i = 0; i < columnKeys.length; i++) {
+	                ths.push(React.createElement(
+	                    "th",
+	                    { key: columnKeys[i] },
+	                    columnKeys[i]
+	                ));
+	            }
+
+	            return ths;
 	        };
 
 	        return React.createElement(
@@ -27709,13 +27725,13 @@
 	                    React.createElement(
 	                        "tr",
 	                        null,
-	                        this.props.data.columns.map(createHeader, this)
+	                        createColumns(this.props.source)
 	                    )
 	                ),
 	                React.createElement(
 	                    "tbody",
 	                    null,
-	                    createRows(this.props.data)
+	                    createRows(this.props.source, this.props.keyField)
 	                )
 	            )
 	        );
@@ -27728,15 +27744,68 @@
 /* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	//Mock
+
+	var courses = __webpack_require__(248).courses;
+
+	var CourseApi = {
+	    getAll: function getAll() {
+	        return JSON.parse(JSON.stringify(courses));
+	    }
+	};
+
+	module.exports = CourseApi;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+	    courses: [{
+	        id: 1,
+	        title: 'practice 1',
+	        author: 'Iuri',
+	        category: 'Study',
+	        length: 2.3
+	    }, {
+	        id: 2,
+	        title: 'Clean Code: Writing Code for Humans',
+	        author: 'Cory House',
+	        category: 'Software Practices',
+	        length: 3.1
+	    }]
+	};
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	var React = __webpack_require__(1);
-	var CancelButton = __webpack_require__(248);
+	var CancelButton = __webpack_require__(250);
+	var Input = __webpack_require__(243);
+	var NumberInput = __webpack_require__(251);
 
 	var ManageCoursePage = React.createClass({
 	    displayName: 'ManageCoursePage',
 
+	    getInitialState: function getInitialState() {
+	        return { value: '' };
+	    },
+	    handleChange: function handleChange(event) {
+	        this.setState({ value: event.target.value });
+	    },
+
 	    render: function render() {
+	        var formClass = 'ui form segment';
+	        if (this.props.error && this.props.error.lenght > 0) {
+	            formClass += " " + 'error';
+	        };
 
 	        return React.createElement(
 	            'div',
@@ -27746,7 +27815,36 @@
 	                { className: 'ui header' },
 	                'ManageCourse'
 	            ),
-	            React.createElement(CancelButton, { value: 'Cancel', 'return': '/courses' })
+	            React.createElement(
+	                'div',
+	                { className: 'ui segment' },
+	                React.createElement(
+	                    'form',
+	                    { className: formClass },
+	                    React.createElement(Input, { name: 'Title',
+	                        label: 'Title',
+	                        placeholder: 'Title',
+	                        value: this.props.value,
+	                        onChange: this.handleChange }),
+	                    React.createElement(Input, { name: 'Author',
+	                        label: 'Author',
+	                        placeholder: 'Author Name',
+	                        value: this.props.value,
+	                        onChange: this.handleChange }),
+	                    React.createElement(Input, { name: 'Category',
+	                        label: 'Category',
+	                        placeholder: 'Category Name',
+	                        value: this.props.value,
+	                        onChange: this.handleChange }),
+	                    React.createElement(NumberInput, { name: 'Length',
+	                        label: 'Length',
+	                        placeholder: 'Length',
+	                        value: this.props.value,
+	                        onChange: this.handleChange }),
+	                    React.createElement('input', { type: 'submit', value: 'Save', className: 'ui submit primary button' }),
+	                    React.createElement(CancelButton, { value: 'Cancel', 'return': '/courses' })
+	                )
+	            )
 	        );
 	    }
 	});
@@ -27754,7 +27852,7 @@
 	module.exports = ManageCoursePage;
 
 /***/ },
-/* 248 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27770,18 +27868,64 @@
 
 	    render: function render() {
 	        return React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	                Link,
-	                { to: this.props.return, className: 'ui button' },
-	                this.props.value
-	            )
+	            Link,
+	            { to: this.props.return, className: 'ui button' },
+	            this.props.value
 	        );
 	    }
 	});
 
 	module.exports = CancelButton;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(1);
+
+	var NumberInput = React.createClass({
+	    displayName: "NumberInput",
+
+	    propTypes: {
+	        name: React.PropTypes.string.isRequired,
+	        label: React.PropTypes.string.isRequired,
+	        placeholder: React.PropTypes.string,
+	        error: React.PropTypes.string,
+	        onChange: React.PropTypes.func.isRequired,
+	        value: React.PropTypes.string
+	    },
+
+	    render: function render() {
+	        return React.createElement(
+	            "div",
+	            { className: "field" },
+	            React.createElement(
+	                "label",
+	                null,
+	                this.props.label
+	            ),
+	            React.createElement("input", { type: "number",
+	                name: this.props.name,
+	                placeholder: this.props.placeholder,
+	                value: this.props.value,
+	                ref: this.props.name,
+	                onChange: this.props.onChange }),
+	            React.createElement(
+	                "div",
+	                { className: "ui error message" },
+	                React.createElement(
+	                    "p",
+	                    null,
+	                    this.props.error
+	                )
+	            )
+	        );
+	    }
+	});
+
+	module.exports = NumberInput;
 
 /***/ }
 /******/ ]);

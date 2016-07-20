@@ -7,8 +7,7 @@ var Link = Router.Link;
 
 var test = {
 	"key": "Id",
-	"columns": ["Id", "Name"],
-	"rows": [{"Id":1, "Name": "Leitura 1"}, 
+	"source": [{"Id":1, "Name": "Leitura 1"}, 
 			{"Id":2, "Name": "Leitura 2"},
 			{"Id":3, "Name":"Outra Leitura"}]
 };
@@ -21,7 +20,7 @@ var CoursesList = React.createClass({
                         <Link to="course/add" className="ui button">Add</Link>
                     </div>
                     <div className="ui divider"></div>
-                <Table key="listTable" data={test}/>
+                <Table keyField="Id" source={this.props.courses}/>
             </div>
             )
     }

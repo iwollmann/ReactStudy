@@ -8,9 +8,7 @@ var Link = Router.Link;
 var CancelButton = React.createClass({
     render: function () {
         return(
-            <div>
-                <Link to={this.props.return} className="ui button">{this.props.value}</Link>
-            </div>
+            <Link to={this.props.return} className="ui button">{this.props.value}</Link>
         )
     }
 });

@@ -4,19 +4,16 @@ var React = require('react');
 
 var Table = React.createClass({
     propTypes:{
-        data: React.PropTypes.shape({
-            key: React.PropTypes.string.isRequired,
-            columns : React.PropTypes.array.isRequired,
-            rows: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
-        })
+        keyField: React.PropTypes.string.isRequired,        
+        source: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
     },
 
     render: function () {
-        var createRows = function (data){
+        var createRows = function (source, key){
             var trs = [];
-            for (var row in data.rows) {
-                if (data.rows.hasOwnProperty(row)) {
-                    trs.push(createRow(data.rows[row], data.key));
+            for (var row in source) {
+                if (source.hasOwnProperty(row)) {
+                    trs.push(createRow(source[row], key));
                 }
             }
 
@@ -31,17 +28,29 @@ var Table = React.createClass({
                     <td key={row[columns[i]]}>{row[columns[i]]}</td>
                     );
             }
-
+            
             return(
-                <tr key={row[key]}>
+                <tr key={row[key.toLowerCase()]}>
                     {tds}
                 </tr>
             )
         };
 
-        var createHeader = function (column) {
+        var createColumns = function (source) {
+            if (source.length == 0)
+                return;
+
+            var ths =[];
+            var columns = source[0];
+            var columnKeys = Object.keys(columns);
+            for (var i = 0; i < columnKeys.length; i++) {
+                ths.push(
+                    <th key={columnKeys[i]}>{columnKeys[i]}</th>
+                    );
+            }
+
             return(
-                <th key={column}>{column}</th>
+                ths
             )
         };
 
@@ -50,11 +59,11 @@ var Table = React.createClass({
                 <table className="ui selectable striped celled table">
                     <thead>
                         <tr>
-                            {this.props.data.columns.map(createHeader,this)}
+                            {createColumns(this.props.source)}
                         </tr>
                     </thead>
                     <tbody>
-                        {createRows(this.props.data)}
+                        {createRows(this.props.source, this.props.keyField)}
                     </tbody>
                 </table>
             </div>);
