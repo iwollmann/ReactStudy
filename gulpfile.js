@@ -60,7 +60,6 @@ gulp.task('html',function () {
 });
 
 gulp.task('css',function () {
-    util.log(process.cwd());
     gulp.src(config.paths.css)
         .pipe(concat('css/bundle.css'))
         .pipe(gulp.dest(config.paths.dist));
